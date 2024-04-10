@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class CoinDesk extends StatelessWidget {
   const CoinDesk({super.key, required this.databit});
 
-  final List<BitcoinDatav3> databit;
+  final List<BitcoinPriceIndexV2> databit;
 
   String _formatCurrency(String codeName) {
     var fomat = NumberFormat.compactSimpleCurrency(name: codeName);

@@ -20,8 +20,8 @@ class BitcoinPriceIndex {
   }
 }
 
-class BitcoinDatav3 {
-  BitcoinDatav3(
+class BitcoinPriceIndexV2 {
+  BitcoinPriceIndexV2(
       {required this.code,
       required this.symbol,
       required this.description,

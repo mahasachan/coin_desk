@@ -13,7 +13,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<List<BitcoinDatav3>> futureBitcoinItems;
+  late Future<List<BitcoinPriceIndexV2>> futureBitcoinItems;
 
   @override
   void initState() {
