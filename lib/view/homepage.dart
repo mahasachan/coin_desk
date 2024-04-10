@@ -15,24 +15,32 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<BitcoinPriceIndexV2>> futureBitcoinItems;
 
-  @override
-  void initState() {
-    super.initState();
-    futureBitcoinItems =
-        Provider.of<BitcoinDataProvider>(context, listen: false)
-            .futureBitcoinItems;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _loadBitcoinData();
+  // }
+
+  // Future<void> _loadBitcoinData() async {
+  //   try {
+  //     await Provider.of<BitcoinDataProvider>(context, listen: false)
+  //         .futureBitcoinItems;
+  //   } catch (error) {
+  //     throw Exception('Failed to load Bitcoin data');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Coin Desk'),
-        ),
-        body: FutureBuilder(
-            future:
-                Provider.of<BitcoinDataProvider>(context).futureBitcoinItems,
-            builder: (context, snapshot) {
+      appBar: AppBar(
+        title: const Text('Coin Desk'),
+      ),
+      body:
+          Consumer<BitcoinDataProvider>(builder: (_, bitcoinDataProvider, __) {
+        return FutureBuilder(
+            future: bitcoinDataProvider.futureBitcoinItems,
+            builder: (___, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -41,7 +49,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text('Failed to load Bitcoin data ja'));
               }
               final bitcoinData = snapshot.data!;
-              return CoinDesk(databit: bitcoinData);
-            }));
+              return CoinDesk(bitcoinData: bitcoinData);
+            });
+      }),
+
+      // body: FutureBuilder(
+      //     future:
+      //         Provider.of<BitcoinDataProvider>(context).futureBitcoinItems,
+      //     builder: (context, snapshot) {
+      //       if (snapshot.connectionState == ConnectionState.waiting) {
+      //         print('loading ja');
+      //         return const Center(child: CircularProgressIndicator());
+      //       }
+      //       if (snapshot.hasError) {
+      //         return const Center(
+      //             child: Text('Failed to load Bitcoin data ja'));
+      //       }
+      //       final bitcoinData = snapshot.data!;
+      //       return CoinDesk(bitcoinData: bitcoinData);
+      //     })
+    );
   }
 }

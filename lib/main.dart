@@ -16,19 +16,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => BitcoinDataProvider(),
-      child: MaterialApp(
-          title: 'Coin Desk',
-          theme: ThemeData().copyWith(
-              colorScheme: kColorScheme,
-              appBarTheme: AppBarTheme(
-                backgroundColor: kColorScheme.onPrimaryContainer,
-                foregroundColor: kColorScheme.primaryContainer,
-              )),
-          home: const SafeArea(
-            child: MyHomePage(),
-          )),
-    );
+    return MaterialApp(
+        title: 'Coin Desk',
+        theme: ThemeData().copyWith(
+            colorScheme: kColorScheme,
+            appBarTheme: AppBarTheme(
+              backgroundColor: kColorScheme.onPrimaryContainer,
+              foregroundColor: kColorScheme.primaryContainer,
+            )),
+        home: SafeArea(
+          child: ChangeNotifierProvider(
+              create: (_) => BitcoinDataProvider(), child: const MyHomePage()),
+        ));
   }
 }

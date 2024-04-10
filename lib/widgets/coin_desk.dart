@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CoinDesk extends StatelessWidget {
-  const CoinDesk({super.key, required this.databit});
+  const CoinDesk({super.key, required this.bitcoinData});
 
-  final List<BitcoinPriceIndexV2> databit;
+  final List<BitcoinPriceIndexV2> bitcoinData;
 
   String _formatCurrency(String codeName) {
     var fomat = NumberFormat.compactSimpleCurrency(name: codeName);
@@ -67,21 +67,21 @@ class CoinDesk extends StatelessWidget {
                 ],
               ),
               ...List.generate(
-                databit.length,
+                bitcoinData.length,
                 (index) => TableRow(children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(databit[index].code),
+                    child: Text(bitcoinData[index].code),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(_formatCurrency(databit[index].code)),
+                    child: Text(_formatCurrency(bitcoinData[index].code)),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                       child: Text(
-                        databit[index].rate,
+                        bitcoinData[index].rate,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -89,7 +89,7 @@ class CoinDesk extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
-                      child: Text(databit[index].description,
+                      child: Text(bitcoinData[index].description,
                           textAlign: TextAlign.center),
                     ),
                   ),
@@ -97,7 +97,7 @@ class CoinDesk extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                       child: Text(
-                        databit[index].rateFloat.toString(),
+                        bitcoinData[index].rateFloat.toString(),
                         textAlign: TextAlign.center,
                       ),
                     ),

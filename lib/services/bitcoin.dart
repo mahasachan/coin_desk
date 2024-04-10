@@ -16,7 +16,7 @@ class BitcoinService {
   //   }
   // }
 
-  Future<List<BitcoinPriceIndexV2>> fetchBitcoinDatav2() async {
+  Future<List<BitcoinPriceIndexV2>> fetchBitcoinPriceData() async {
     List<BitcoinPriceIndexV2> bitcoinItemsV3 = [];
     final url = Uri.parse('https://api.coindesk.com/v1/bpi/currentprice.json');
     final response =

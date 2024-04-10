@@ -6,24 +6,47 @@ import 'package:flutter/material.dart';
 class BitcoinDataProvider extends ChangeNotifier {
   BitcoinDataProvider() {
     // futureBitcoinData = _fetchBitcoinData();
-    futureBitcoinItems = _fetchBitcoinDatav2();
+    // futureBitcoinItems = _fetchBitcoinPriceIndexData();
+    _loadBitcoinData();
   }
   // late Future<BitcoinData> futureBitcoinData;
+  final BitcoinService _bitcoinService = BitcoinService();
   late Future<List<BitcoinPriceIndexV2>> futureBitcoinItems;
   List<BitcoinPriceIndexV2> _cachedBitcoinData = [];
 
-  Future<List<BitcoinPriceIndexV2>> _fetchBitcoinDatav2() async {
+  Future<void> _loadBitcoinData() async {
     try {
-      if (_cachedBitcoinData.isNotEmpty) {
-        return _cachedBitcoinData;
+      if (_cachedBitcoinData.isEmpty) {
+        // _cachedBitcoinData = await _bitcoinService.fetchBitcoinPriceData();
+        futureBitcoinItems = _bitcoinService.fetchBitcoinPriceData();
+        _cachedBitcoinData = await futureBitcoinItems;
+        notifyListeners();
       } else {
-        _cachedBitcoinData = await BitcoinService().fetchBitcoinDatav2();
-        return _cachedBitcoinData;
+        futureBitcoinItems = Future.value(_cachedBitcoinData);
       }
-    } catch (err) {
-      throw Exception('Failed to load Bitcoin data');
+    } catch (error) {
+      futureBitcoinItems = Future.error('Failed to load Bitcoin data');
+      notifyListeners();
     }
   }
+
+  Future<void> refreshBitcoinData() async {
+    _cachedBitcoinData.clear();
+    await _loadBitcoinData();
+  }
+
+  // Future<List<BitcoinPriceIndexV2>> _fetchBitcoinPriceIndexData() async {
+  //   try {
+  //     if (_cachedBitcoinData.isNotEmpty) {
+  //       return _cachedBitcoinData;
+  //     } else {
+  //       _cachedBitcoinData = await BitcoinService().fetchBitcoinPriceData();
+  //       return _cachedBitcoinData;
+  //     }
+  //   } catch (err) {
+  //     throw Exception('Failed to load Bitcoin data');
+  //   }
+  // }
 
   // Future<BitcoinData> _fetchBitcoinData() async {
   //   try {
