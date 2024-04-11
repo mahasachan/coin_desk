@@ -1,6 +1,7 @@
 import 'package:coin_desk/controller/bitcoin_provider.dart';
 // import 'package:coin_desk/models/bitcoin.dart';
-import 'package:coin_desk/models/bitcoin_price_index.dart';
+// import 'package:coin_desk/models/bitcoin_price_index.dart';
+import 'package:coin_desk/models/bitcoin_rate.dart';
 import 'package:coin_desk/widgets/coin_desk.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<List<BitcoinPriceIndexV2>> futureBitcoinItems;
+  late Future<List<BitcoinRate>> futureBitcoinItems;
 
   // @override
   // void initState() {

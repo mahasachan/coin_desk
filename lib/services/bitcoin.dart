@@ -1,50 +1,29 @@
 import 'dart:convert';
 // import 'package:coin_desk/models/bitcoin.dart';
-import 'package:coin_desk/models/bitcoin_price_index.dart';
+// import 'package:coin_desk/models/bitcoin_price_index.dart';
+import 'package:coin_desk/models/bitcoin_rate.dart';
 import 'package:http/http.dart' as http;
 
 class BitcoinService {
-  // Future<BitcoinData> fetchBitcoinData() async {
-  //   final url = Uri.parse('https://api.coindesk.com/v1/bpi/currentprice.json');
-  //   final response =
-  //       await http.get(url, headers: {"content-type": "application/json"});
-
-  //   if (response.statusCode == 200) {
-  //     return BitcoinData.fromJson(jsonDecode(response.body));
-  //   } else {
-  //     throw Exception('Failed to load Bitcoin data');
-  //   }
-  // }
-
-  Future<List<BitcoinPriceIndexV2>> fetchBitcoinPriceData() async {
-    List<BitcoinPriceIndexV2> bitcoinItemsV3 = [];
+  Future<List<BitcoinRate>> fetchBitcoinPriceData() async {
+    List<BitcoinRate> bitcoinItems = [];
     final url = Uri.parse('https://api.coindesk.com/v1/bpi/currentprice.json');
     final response =
         await http.get(url, headers: {"content-type": "application/json"});
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> listDataBitcoin = jsonDecode(response.body);
-      for (final item in listDataBitcoin.entries) {
-        if (item.key == "bpi") {
-          final Map<String, dynamic> bpi = item.value;
-          for (final bpiItem in bpi.entries) {
-            // final Map<String, dynamic> currency = bpiItem.value;
-            // final String code = currency['code'];
-            // final String symbol = currency['symbol'];
-            // final String rate = currency['rate'];
-            // final String description = currency['description'];
-            // final double rateFloat = currency['rate_float'];
-            bitcoinItemsV3.add(BitcoinPriceIndexV2(
-                code: bpiItem.value['code'],
-                rate: bpiItem.value['rate'],
-                symbol: bpiItem.value['symbol'],
-                description: bpiItem.value['description'],
-                rateFloat: bpiItem.value['rate_float']));
-          }
-        }
-      }
-      return bitcoinItemsV3;
-      // return BitcoinData.fromJson(jsonDecode(response.body));
+      final bitcoinPriceIndexItems =
+          listDataBitcoin.entries.firstWhere((element) => element.key == "bpi");
+      bitcoinPriceIndexItems.value.entries.forEach((element) {
+        bitcoinItems.add(BitcoinRate(
+            code: element.value['code'],
+            rate: element.value['rate'],
+            symbol: element.value['symbol'],
+            description: element.value['description'],
+            rateFloat: element.value['rate_float']));
+      });
+      return bitcoinItems;
     } else {
       throw Exception('Failed to load Bitcoin data');
     }

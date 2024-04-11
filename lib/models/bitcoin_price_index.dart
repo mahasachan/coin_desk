@@ -20,17 +20,17 @@
 //   }
 // }
 
-class BitcoinPriceIndexV2 {
-  BitcoinPriceIndexV2(
-      {required this.code,
-      required this.symbol,
-      required this.description,
-      required this.rate,
-      required this.rateFloat});
+// class BitcoinPriceIndexV2 {
+//   BitcoinPriceIndexV2(
+//       {required this.code,
+//       required this.symbol,
+//       required this.description,
+//       required this.rate,
+//       required this.rateFloat});
 
-  final String code;
-  final String symbol;
-  final String description;
-  final double rateFloat;
-  final String rate;
-}
+//   final String code;
+//   final String symbol;
+//   final String description;
+//   final double rateFloat;
+//   final String rate;
+// }

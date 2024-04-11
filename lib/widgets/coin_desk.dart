@@ -1,22 +1,18 @@
-import 'package:coin_desk/models/bitcoin_price_index.dart';
+// import 'package:coin_desk/models/bitcoin_price_index.dart';
+import 'package:coin_desk/models/bitcoin_rate.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CoinDesk extends StatelessWidget {
   const CoinDesk({super.key, required this.bitcoinData});
 
-  final List<BitcoinPriceIndexV2> bitcoinData;
-
-  String _formatCurrency(String codeName) {
-    var fomat = NumberFormat.compactSimpleCurrency(name: codeName);
-    return fomat.currencySymbol;
-  }
+  final List<BitcoinRate> bitcoinData;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(12),
         child: SingleChildScrollView(
           child: Table(
             border: TableBorder.all(
@@ -29,84 +25,107 @@ class CoinDesk extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primaryContainer,
                 ),
                 children: const [
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Code'),
-                    ),
+                  TableCellStyle(
+                    title: 'code',
+                    textAlign: TextAlign.left,
                   ),
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('symbol'),
-                    ),
+                  TableCellStyle(
+                    title: 'Symbol',
                   ),
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(child: Text('Rate')),
-                    ),
+                  TableCellStyle(
+                    title: 'Rate',
                   ),
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(child: Text('Description')),
-                    ),
-                  ),
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(child: Text('Rate float')),
-                    ),
+                  TableCellStyle(title: 'description'),
+                  TableCellStyle(
+                    title: 'Rate Float',
                   ),
                 ],
               ),
               ...List.generate(
                 bitcoinData.length,
                 (index) => TableRow(children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(bitcoinData[index].code),
+                  TextInRow(
+                    bitcoinValueStr: bitcoinData[index].code,
+                    textAlign: TextAlign.left,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(_formatCurrency(bitcoinData[index].code)),
+                  TextInRow(
+                    bitcoinValueStr: _formatCurrency(bitcoinData[index].code),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        bitcoinData[index].rate,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                  TextInRow(
+                    bitcoinValueStr: bitcoinData[index].rate,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(bitcoinData[index].description,
-                          textAlign: TextAlign.center),
-                    ),
+                  TextInRow(
+                    bitcoinValueStr: bitcoinData[index].description,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        bitcoinData[index].rateFloat.toString(),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                  TextInRow(
+                    bitcoinValueStr: bitcoinData[index].rateFloat.toString(),
                   ),
                 ]),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  String _formatCurrency(String codeName) {
+    var fomat = NumberFormat.compactSimpleCurrency(name: codeName);
+    return fomat.currencySymbol;
+  }
+}
+
+class TextInRow extends StatelessWidget {
+  const TextInRow({
+    super.key,
+    required this.bitcoinValueStr,
+    this.textAlign,
+    this.padding,
+  });
+
+  final String bitcoinValueStr;
+  final TextAlign? textAlign;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding ?? const EdgeInsets.all(8),
+      child: Text(
+        bitcoinValueStr,
+        textAlign: textAlign ?? TextAlign.center,
+      ),
+    );
+  }
+}
+
+class TableCellStyle extends StatelessWidget {
+  const TableCellStyle(
+      {super.key,
+      required this.title,
+      this.fontWeight,
+      this.textAlign,
+      this.padding,
+      this.verticalAlignment});
+
+  final String title;
+  final FontWeight? fontWeight;
+  final TextAlign? textAlign;
+  final EdgeInsets? padding;
+  final TableCellVerticalAlignment? verticalAlignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return TableCell(
+      verticalAlignment: verticalAlignment ?? TableCellVerticalAlignment.middle,
+      child: Padding(
+        padding: padding ?? const EdgeInsets.all(8.0),
+        child: Center(
+            child: Text(
+          title,
+          style: TextStyle(fontWeight: fontWeight ?? FontWeight.bold),
+          textAlign: textAlign ?? TextAlign.center,
+        )),
       ),
     );
   }
