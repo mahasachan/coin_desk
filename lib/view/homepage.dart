@@ -16,59 +16,67 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<BitcoinRate>> futureBitcoinItems;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _loadBitcoinData();
-  // }
-
-  // Future<void> _loadBitcoinData() async {
-  //   try {
-  //     await Provider.of<BitcoinDataProvider>(context, listen: false)
-  //         .futureBitcoinItems;
-  //   } catch (error) {
-  //     throw Exception('Failed to load Bitcoin data');
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+    futureBitcoinItems =
+        Provider.of<BitcoinDataProvider>(context, listen: false)
+            .futureBitcoinItems;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Coin Desk'),
-      ),
-      body:
-          Consumer<BitcoinDataProvider>(builder: (_, bitcoinDataProvider, __) {
-        return FutureBuilder(
-            future: bitcoinDataProvider.futureBitcoinItems,
-            builder: (___, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.hasError) {
-                return const Center(
-                    child: Text('Failed to load Bitcoin data ja'));
-              }
-              final bitcoinData = snapshot.data!;
-              return CoinDesk(bitcoinData: bitcoinData);
-            });
-      }),
+        appBar: AppBar(
+          title: const Text('Coin Desk'),
+        ),
+        body: const ConsumerFutureBuilder());
+    // body: const MyFuterBuilder2());
+  }
+}
 
-      // body: FutureBuilder(
-      //     future:
-      //         Provider.of<BitcoinDataProvider>(context).futureBitcoinItems,
-      //     builder: (context, snapshot) {
-      //       if (snapshot.connectionState == ConnectionState.waiting) {
-      //         print('loading ja');
-      //         return const Center(child: CircularProgressIndicator());
-      //       }
-      //       if (snapshot.hasError) {
-      //         return const Center(
-      //             child: Text('Failed to load Bitcoin data ja'));
-      //       }
-      //       final bitcoinData = snapshot.data!;
-      //       return CoinDesk(bitcoinData: bitcoinData);
-      //     })
-    );
+class ConsumerFutureBuilder extends StatelessWidget {
+  const ConsumerFutureBuilder({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<BitcoinDataProvider>(builder: (_, bitcoinDataProvider, __) {
+      return FutureBuilder(
+          future: bitcoinDataProvider.futureBitcoinItems,
+          builder: (___, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            }
+            final bitcoinData = snapshot.data!;
+            return CoinDesk(bitcoinData: bitcoinData);
+          });
+    });
+  }
+}
+
+class MyFuterBuilder2 extends StatelessWidget {
+  const MyFuterBuilder2({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: Provider.of<BitcoinDataProvider>(context).futureBitcoinItems,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Center(child: Text('Failed to load Bitcoin data ja'));
+          }
+          final bitcoinData = snapshot.data!;
+          return CoinDesk(bitcoinData: bitcoinData);
+        });
   }
 }

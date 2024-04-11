@@ -12,16 +12,18 @@ class BitcoinService {
         await http.get(url, headers: {"content-type": "application/json"});
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> listDataBitcoin = jsonDecode(response.body);
-      final bitcoinPriceIndexItems =
-          listDataBitcoin.entries.firstWhere((element) => element.key == "bpi");
-      bitcoinPriceIndexItems.value.entries.forEach((element) {
-        bitcoinItems.add(BitcoinRate(
-            code: element.value['code'],
-            rate: element.value['rate'],
-            symbol: element.value['symbol'],
-            description: element.value['description'],
-            rateFloat: element.value['rate_float']));
+      final Map<String, dynamic> mapDataBitcoin = jsonDecode(response.body);
+      final MapEntry<String, dynamic> mapBitcoinPriceIndex =
+          mapDataBitcoin.entries.firstWhere((element) => element.key == "bpi");
+
+      mapBitcoinPriceIndex.value.entries.forEach((element) {
+        // bitcoinItems.add(BitcoinRate(
+        //     code: element.value['code'],
+        //     rate: element.value['rate'],
+        //     symbol: element.value['symbol'],
+        //     description: element.value['description'],
+        //     rateFloat: element.value['rate_float']));
+        bitcoinItems.add(BitcoinRate.fromJson(element.value));
       });
       return bitcoinItems;
     } else {
